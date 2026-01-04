@@ -1,6 +1,6 @@
 let IS_PROD = true;
 const servers = IS_PROD ?
-"https://convorabackend.onrender.com" :
+"https://convora-r6zd.onrender.com" :
     "http://localhost:8080" 
 
 
