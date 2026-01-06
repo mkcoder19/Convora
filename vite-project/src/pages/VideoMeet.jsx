@@ -83,7 +83,6 @@ export default function VideoMeetComponent() {
         };
     }, []);
 
-
     const createPeer = (peerId) => {
         const peer = new RTCPeerConnection(peerConfig);
         peersRef.current[peerId] = peer;
@@ -286,7 +285,6 @@ export default function VideoMeetComponent() {
                         </IconButton>
                     </div>
 
-                    {/* ---------- LOCAL VIDEO ---------- */}
                     <video
                         autoPlay
                         muted
@@ -348,6 +346,9 @@ export default function VideoMeetComponent() {
                         <div className={styles.chatContainer}>
                             <div className={styles.chatHeader}>
                                 <strong>Chat</strong>
+                                <IconButton onClick={()=>setShowChat(false)}>
+                                    <CloseIcon/>
+                                </IconButton>
                             </div>
                             <div className={styles.chatMessages}>
                                 {messages.map((m, i) => (
@@ -363,8 +364,9 @@ export default function VideoMeetComponent() {
                                     value={message}
                                     onChange={e => setMessage(e.target.value)}
                                     onKeyDown={e => e.key === "Enter" && sendMessage()}
+                                    label={"Type any message"}
                                 />
-                                <IconButton onClick={sendMessage}>
+                                <IconButton onClick={sendMessage} style={{color : "grey"}}>
                                     <SendIcon />
                                 </IconButton>
                             </div>
