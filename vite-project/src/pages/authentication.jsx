@@ -54,8 +54,11 @@ export default function Authentication() {
 
             routeTo('/home');
         }catch(err){
-            let message = (err.response.data.message);
-            setError(message);
+            setError(
+              err?.response?.data?.message ||
+                err?.message ||
+                "Something went wrong"
+            );
         }
     }
 
@@ -147,7 +150,7 @@ export default function Authentication() {
       </Grid>
                 <Snackbar
                     open={open}
-                    autoHideDuration={4000}
+                    autoHideDuration={10000}
                     message={message}
                 />
     </ThemeProvider>

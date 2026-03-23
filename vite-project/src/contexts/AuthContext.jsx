@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import servers from "../environment";
@@ -13,34 +13,42 @@ export const AuthProvider = ({children})=>{
 
     const [userData , setUserData] = useState(authContext);
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setUserData({ token });
+        }
+    }, []);
+
     const handleRegister = async (name , username , password)=>{
         try{
-            let request = await client.post('/register' , {
+            let res = await client.post('/register' , {
                 name : name,
                 username : username,
                 password : password
             });
 
-            if(request.status === 201){
-                return request.data.message;
-            }
+            localStorage.setItem("token" , res.data.token);
+            return res.data.user;
         }catch(err){
-            throw err;
+            throw err.res?.data || err;
         }
     }
 
     const handleLogin = async(username , password)=>{
         try{
-            let request = await client.post('/login' , {
+            const res = await client.post('/login' , {
                 username : username,
                 password : password
             });
 
-            if(request.status === 200){
-                localStorage.setItem("token" , request.data.token);
+            if(res.status === 200){
+                localStorage.setItem("token" , res.data.token);
+                setUserData(res.data.user || username);
+                return "Login Successful";
             }
         }catch(err){
-            throw err;
+            throw err.res?.data || err;
         }
     }
 
